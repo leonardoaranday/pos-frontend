@@ -4,7 +4,7 @@ import axios from 'axios';
 export default function app() {
   const [productos, setproductos] = useState([]);
   const [carrito, setcarrito] = useState([]);
-  const [total, settotal] = useState(0);
+  const total = carrito.reduce((suma, item) => suma + Number(item.precio), 0);
 
   useEffect(() => {
     axios.get('https://api-punto-venta-lz5t.onrender.com/api/productos')
@@ -14,7 +14,6 @@ export default function app() {
 
   const agregarticket = (prod) => {
     setcarrito([...carrito, prod]);
-    settotal(total + prod.precio);
   };
 
   const procesarcobro = async () => {
@@ -23,7 +22,6 @@ export default function app() {
       const articulos = carrito.map(item => ({ producto: item._id, cantidad: 1, precio: item.precio }));
       await axios.post('https://api-punto-venta-lz5t.onrender.com/api/venta', { articulos, total });
       setcarrito([]);
-      settotal(0);
       alert('cobro exitoso. base de datos actualizada.');
     } catch (e) {
       alert('error al procesar cobro');
