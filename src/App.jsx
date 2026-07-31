@@ -7,7 +7,7 @@ export default function app() {
   const [total, settotal] = useState(0);
 
   useEffect(() => {
-    axios.get('https://api-punto-venta-lz5t.onrender.com')
+    axios.get('https://api-punto-venta-lz5t.onrender.com/api/productos')
       .then(res => setproductos(res.data))
       .catch(() => {});
   }, []);
@@ -21,7 +21,7 @@ export default function app() {
     if (carrito.length === 0) return;
     try {
       const articulos = carrito.map(item => ({ producto: item._id, cantidad: 1, precio: item.precio }));
-      await axios.post('https://api-punto-venta-lz5t.onrender.com', { articulos, total });
+      await axios.post('https://api-punto-venta-lz5t.onrender.com/api/venta', { articulos, total });
       setcarrito([]);
       settotal(0);
       alert('cobro exitoso. base de datos actualizada.');
